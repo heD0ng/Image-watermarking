@@ -23,3 +23,13 @@ npm run dev
 npm run build
 ```
 
+
+
+
+
+---
+
+# gif show
+
+  ![image](https://github.com/lexsaints/powershell/blob/master/IMG/ps2.png) 
+

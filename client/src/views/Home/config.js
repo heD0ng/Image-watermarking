@@ -1,10 +1,10 @@
 export default {
-    txtCont: '水印文字', // 文本内容
+    content: '水印文字', // 文本内容
     txtSize: 30, // 文本尺寸
     txtAngle: 0, // 文本旋转角度
     textFam: 'KaiTi_GB2312', // 文本字体,
     textColor: '#00ced1', // 文本颜色
-    textFullImg: 0, // 是否全图生成水印
+    full: 0, // 是否全图生成水印
     horTxtMargin: 500, // 水平方向的距离
     maxHorMargin: 1000, // 水平方向最大值
     maxVerMargin: 1000, // 垂直方向最大值

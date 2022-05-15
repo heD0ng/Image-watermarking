@@ -23,16 +23,16 @@ export async function waterTextImg(formRef, id) {
         ctx.font = formRef.value.txtSize + 'px ' + formRef.value.textFam;
         ctx.fillStyle = formRef.value.textColor;
         // 文字旋转
-        if (formRef.value.textFullImg === 1) {
+        if (formRef.value.full === 1) {
             for (let i = -20; i < 20; i++) {
                 ctx.rotate(-(formRef.value.txtAngle * Math.PI) / 180); // 水印初始偏转角度
-                const text = formRef.value.txtCont + ' '.repeat(Math.ceil(formRef.value.horTxtMargin/ 10));
+                const text = formRef.value.content + ' '.repeat(Math.ceil(formRef.value.horTxtMargin/ 10));
                 ctx.fillText(text.repeat(100), 0, i * formRef.value.verTxtMargin / 3);
                 ctx.rotate((formRef.value.txtAngle * Math.PI) / 180); // 把水印偏转角度调整为原来的，不然他会一直转
             }
         } else {
             // 绘制文字
-            ctx.fillText(formRef.value.txtCont, formRef.value.horTxtMargin, formRef.value.verTxtMargin);
+            ctx.fillText(formRef.value.content, formRef.value.horTxtMargin, formRef.value.verTxtMargin);
             ctx.rotate(formRef.value.txtAngle * Math.PI / 180);
         }
         const newImg = new Image();

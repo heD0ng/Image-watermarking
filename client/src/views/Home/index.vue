@@ -1,13 +1,24 @@
 <template>
   <div class="dlg-home">
     <div class="dlg-home--container">
-      <el-button type="primary" @click="handleImgUpload('fileUpload')">
-        <i class="el-icon-upload el-icon--left"></i> 上传图片
-      </el-button>
+        <el-popover
+          placement="top"
+          title="Title"
+          :width="200"
+          trigger="hover"
+          content="the size of the image must be less than 10M."
+      >
+        <template #reference>
+          <el-button type="primary" @click="handleImgUpload('fileUpload')">
+            <i class="el-icon-upload el-icon--left"></i> 上传图片
+          </el-button>
+        </template>
+      </el-popover>
       <file-upload
         :id="`fileUpload`"
         :accept-type="`image/jpeg,image/jpg,image/png`"
         @handFile="handFile"
+        ref="fileInput"
       >
       </file-upload>
     </div>
@@ -20,17 +31,18 @@
               placeholder="请输入水印内容"
               size="small"
               clearable
+              @input="getTextWaterImg"
             />
           </el-form-item>
           <el-form-item label="全图水印">
-            <el-select size="small" placeholder="请选择" v-model="form.full">
+            <el-select size="small" @change="getTextWaterImg" placeholder="请选择" v-model="form.full">
               <el-option label="否" :value="0"></el-option>
               <el-option label="是" :value="1"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="操作">
             <el-button :disabled="!hasUpload" type="primary" @click="handleDownload" size="small"> 下载图片</el-button>
-            <el-button size="small"> 重置图片 </el-button>
+            <el-button size="small" @click="reset"> 重置图片 </el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -73,16 +85,16 @@ export default {
   setup() {
     const form = ref(deepClone(textWaterImg));
     let hasUpload = ref(false);
-    const hasChooseFileLoadingRef = ref(false);
     const imgUrl = ref('')
+    const fileInput = ref(null)
 
     const handleImgUpload = (id) => {
       document.querySelector(`#${id}`).click();
-      hasChooseFileLoadingRef.value = true;
+      console.log(fileInput.value)
     };
   
     const handFile = async (file) => {
-      // console.log(isImgFile(file))
+      console.log(isImgFile(file))
       if (!isImgFile(file)) return;
       try {
         const res = await uploadImgAndPress(file);
@@ -92,7 +104,7 @@ export default {
         getTextWaterImg();
         hasUpload.value = true;
       } catch (error) {
-        hasChooseFileLoadingRef.value = false;
+        hasUpload.value = false;
       }
     };
 
@@ -103,19 +115,24 @@ export default {
     const handleDownload = ()=>{
       download('imgCanvas')
     }
+    const reset = () => {
+      form.value = deepClone(textWaterImg);
+      hasUpload.value = false;
+      imgUrl.value = '';
+      document.getElementById('imgCanvas').innerHTML = '';
+      document.getElementById("fileUpload").value = '';
+    }
 
-    watch(()=>{
-      return form.value
-    }, (val)=>{
-      getTextWaterImg()
-    })
     return {
       form,
       handleImgUpload,
       handFile,
       imgUrl,
       handleDownload,
-      hasUpload
+      hasUpload,
+      getTextWaterImg,
+      reset,
+      fileInput
     };
   },
 };
